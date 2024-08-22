@@ -1,1 +1,45 @@
+let inventario = {
+  productos: []
+};
 
+function agregarProducto(codigo, nombre, cantidad) {
+  
+  let codigoUnico = (codigo << 8) + cantidad;
+  
+  inventario.productos.push({
+    codigo: codigoUnico,
+    nombre: nombre,
+    cantidad: cantidad
+  });
+}
+
+function eliminarProducto(codigo) {
+  
+  let codigoOriginal = codigo >> 8;
+  
+  inventario.productos = inventario.productos.filter(producto => producto.codigo !== codigo);
+}
+
+function actualizarCantidad(codigo, cantidad) {
+
+  let codigoOriginal = codigo >> 8;
+  
+  let producto = inventario.productos.find(producto => producto.codigo === codigo);
+  if (producto) {
+    producto.cantidad = cantidad;
+  }
+}
+
+agregarProducto(1, "Producto 1", 10);
+agregarProducto(2, "Producto 2", 20);
+agregarProducto(3, "Producto 3", 30);
+
+console.log(inventario);
+
+eliminarProducto((1 << 8) + 10);
+
+console.log(inventario);
+
+actualizarCantidad((2 << 8) + 20, 25);
+
+console.log(inventario);
