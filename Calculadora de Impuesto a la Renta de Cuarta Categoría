@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculadora de Impuesto a la Renta de Cuarta Categoría</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      width: 50%;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Calculadora de Impuesto a la Renta de Cuarta Categoría</h2>
+    <form>
+      <label for="income">Ingreso Bruto:</label>
+      <input type="number" id="income" value="0" required><br><br>
+      <label for="deductions">Deducciones:</label>
+      <input type="number" id="deductions" value="0" required><br><br>
+      <button type="button" onclick="calculateTax()">Calcular Impuesto</button>
+      <p id="result"></p>
+    </form>
+  </div>
+
+  <script>
+    function calculateTax() {
+      const income = document.getElementById("income").value;
+      const deductions = document.getElementById("deductions").value;
+      const taxableIncome = income - deductions;
+
+      // Escala de impuestos vigente en Perú (2022)
+      const taxRates = [
+        { min: 0, max: 5250, rate: 0.08 },
+        { min: 5251, max: 10500, rate: 0.14 },
+        { min: 10501, max: 21000, rate: 0.17 },
+        { min: 21001, max: 52500, rate: 0.20 },
+        { min: 52501, max: Infinity, rate: 0.30 }
+      ];
+
+      let taxRate = 0;
+      for (const rate of taxRates) {
+        if (taxableIncome >= rate.min && taxableIncome <= rate.max) {
+          taxRate = rate.rate;
+          break;
+        }
+      }
+
+      const tax = taxableIncome * taxRate;
+      const resultElement = document.getElementById("result");
+      resultElement.textContent = `El impuesto a la renta de cuarta categoría es: S/ ${tax.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
