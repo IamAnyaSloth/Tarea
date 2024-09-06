@@ -1,0 +1,46 @@
+const NUM_ESPACIOS = 10;
+
+// Estado de los espacios (true = ocupado, false = libre)
+const espacios = Array(NUM_ESPACIOS).fill(false);
+
+const cocheraContenedor = document.getElementById('cochera');
+
+function inicializarCochera() {
+    for (let i = 0; i < NUM_ESPACIOS; i++) {
+        const div = document.createElement('div');
+        div.className = 'espacio libre';
+        div.dataset.index = i;
+        div.textContent = i + 1;
+        cocheraContenedor.appendChild(div);
+    }
+}
+
+function ocuparEspacio() {
+    const index = espacios.indexOf(false); // Encuentra el primer espacio libre
+    if (index !== -1) {
+        espacios[index] = true;
+        actualizarEspacios();
+    } else {
+        alert('No hay espacios libres.');
+    }
+}
+
+function desocuparEspacio() {
+    const index = espacios.indexOf(true); // Encuentra el primer espacio ocupado
+    if (index !== -1) {
+        espacios[index] = false;
+        actualizarEspacios();
+    } else {
+        alert('No hay espacios ocupados.');
+    }
+}
+
+function actualizarEspacios() {
+    const espaciosDivs = document.querySelectorAll('.espacio');
+    espaciosDivs.forEach(div => {
+        const index = parseInt(div.dataset.index);
+        div.className = 'espacio ' + (espacios[index] ? 'ocupado' : 'libre');
+    });
+}
+
+inicializarCochera();
