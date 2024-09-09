@@ -1,0 +1,86 @@
+class Libro {
+  constructor(titulo, autor, isbn, ejemplares, categoria) {
+    this.titulo = titulo;
+    this.autor = autor;
+    this.isbn = isbn;
+    this.ejemplares = ejemplares;
+    this.categoria = categoria;
+  }
+}
+
+class Usuario {
+  constructor(nombre, id, direccion) {
+    this.nombre = nombre;
+    this.id = id;
+    this.direccion = direccion;
+    this.librosPrestados = [];
+  }
+
+  agregarPrestamo(prestamo) {
+    this.librosPrestados.push(prestamo);
+  }
+}
+
+class Prestamo {
+  constructor(libro, usuario, fechaPrestamo, fechaDevolucion) {
+    this.libro = libro;
+    this.usuario = usuario;
+    this.fechaPrestamo = fechaPrestamo;
+    this.fechaDevolucion = fechaDevolucion;
+  }
+}
+
+class Biblioteca {
+  constructor(nombre, direccion) {
+    this.nombre = nombre;
+    this.direccion = direccion;
+    this.libros = [];
+    this.usuarios = [];
+    this.prestamos = [];
+  }
+
+  agregarLibro(libro) {
+    this.libros.push(libro);
+  }
+
+  agregarUsuario(usuario) {
+    this.usuarios.push(usuario);
+  }
+
+  realizarPrestamo(libro, usuario, fechaPrestamo, fechaDevolucion) {
+    if (libro.ejemplares > 0) {
+      libro.ejemplares -= 1;
+      const prestamo = new Prestamo(libro, usuario, fechaPrestamo, fechaDevolucion);
+      this.prestamos.push(prestamo);
+      usuario.agregarPrestamo(prestamo);
+    } else {
+      console.log(`No hay ejemplares disponibles del libro: ${libro.titulo}`);
+    }
+  }
+
+  devolverLibro(prestamo) {
+    prestamo.libro.ejemplares += 1;
+    this.prestamos = this.prestamos.filter(p => p !== prestamo);
+    prestamo.usuario.librosPrestados = prestamo.usuario.librosPrestados.filter(p => p !== prestamo);
+  }
+}
+
+// Ejemplo de uso:
+
+const biblioteca = new Biblioteca("Biblioteca Central", "Calle Principal 123");
+
+const libro1 = new Libro("El Quijote", "Miguel de Cervantes", "123456789", 3, "Novela");
+const libro2 = new Libro("Cien Años de Soledad", "Gabriel García Márquez", "987654321", 2, "Realismo Mágico");
+
+const usuario1 = new Usuario("Luis Fernández", "U001", "Calle Secundaria 456");
+
+biblioteca.agregarLibro(libro1);
+biblioteca.agregarLibro(libro2);
+biblioteca.agregarUsuario(usuario1);
+
+const fechaPrestamo = new Date("2024-09-01");
+const fechaDevolucion = new Date("2024-09-15");
+
+biblioteca.realizarPrestamo(libro1, usuario1, fechaPrestamo, fechaDevolucion);
+
+console.log(biblioteca);
