@@ -1,0 +1,51 @@
+const semestreNotas = {
+  "estudiante": {
+    "nombre": "Ana Martínez",
+    "id": "A00123456",
+  },
+  "semestre": {
+    "nombre": "Primavera 2024",
+    "año": 2024,
+    "cursos": [
+      {
+        "nombre": "Programación Avanzada",
+        "codigo": "PROG200",
+        "notas": [
+          {
+            "nombre": "Examen Parcial 1",
+            "valor": 85,
+            "ponderacion": 0.25
+          },
+          {
+            "nombre": "Examen Parcial 2",
+            "valor": 90,
+            "ponderacion": 0.25
+          },
+          {
+            "nombre": "Proyecto Final",
+            "valor": 95,
+            "ponderacion": 0.5
+          }
+        ]
+      },
+      {
+        "nombre": "Base de Datos",
+        "codigo": "BD300",
+        "notas": [
+          {
+            "nombre": "Examen Parcial",
+            "valor": 80,
+            "ponderacion": 0.4
+          },
+          {
+            "nombre": "Trabajo Práctico",
+            "valor": 92,
+            "ponderacion": 0.6
+          }
+        ]
+      }
+    ]
+  }
+};
+
+console.log(semestreNotas);
