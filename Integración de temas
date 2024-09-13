@@ -1,0 +1,77 @@
+class Apartamento {
+    constructor(numero, nombreResidente, balance) {
+        this.numero = numero; // Número del apartamento
+        this.nombreResidente = nombreResidente; // Nombre del residente
+        this.balance = balance; // Balance inicial del apartamento
+        this.pagos = []; // Arreglo que guardará los pagos realizados
+    }
+
+    registrarPago(cantidad) {
+        this.pagos.push(cantidad);
+        this.balance -= cantidad;
+    }
+
+    obtenerBalance() {
+        return this.balance;
+    }
+
+    estadoPagos() {
+        return this.balance <= 0 ? 'Pagado' : 'Pendiente';
+    }
+
+    historialPagos() {
+        return this.pagos;
+    }
+}
+
+class Edificio {
+    constructor() {
+        this.apartamentos = []; // Arreglo que contiene todos los apartamentos
+    }
+
+    agregarApartamento(numero, nombreResidente, balance) {
+        const apartamento = new Apartamento(numero, nombreResidente, balance);
+        this.apartamentos.push(apartamento);
+    }
+
+    buscarApartamento(numero) {
+        return this.apartamentos.find(apto => apto.numero === numero);
+    }
+
+    registrarPago(numero, cantidad) {
+        const apartamento = this.buscarApartamento(numero);
+        if (apartamento) {
+            apartamento.registrarPago(cantidad);
+            console.log(`Pago registrado para el apartamento ${numero}: $${cantidad}`);
+        } else {
+            console.log(`Apartamento ${numero} no encontrado.`);
+        }
+    }
+
+    mostrarEstadoPagos() {
+        this.apartamentos.forEach(apto => {
+            console.log(`Apartamento ${apto.numero} (${apto.nombreResidente}): ${apto.estadoPagos()}`);
+        });
+    }
+
+    mostrarBalances() {
+        this.apartamentos.forEach(apto => {
+            console.log(`Apartamento ${apto.numero} - Balance: $${apto.obtenerBalance()}`);
+        });
+    }
+}
+
+
+const miEdificio = new Edificio();
+
+miEdificio.agregarApartamento(101, 'Juan Pérez', 500);
+miEdificio.agregarApartamento(102, 'María García', 750);
+miEdificio.agregarApartamento(103, 'Carlos López', 600);
+
+miEdificio.registrarPago(101, 200);  // Juan Pérez paga $200
+miEdificio.registrarPago(102, 400);  // María García paga $400
+miEdificio.registrarPago(103, 600);  // Carlos López paga el total
+
+miEdificio.mostrarEstadoPagos(); 
+
+miEdificio.mostrarBalances();
