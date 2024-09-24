@@ -1,0 +1,111 @@
+interface IPago {
+    cantidad: number;
+    fecha: Date;
+}
+
+type EstadoPago = 'Pagado' | 'Pendiente';
+
+class Apartamento {
+    numero: number;
+    nombreResidente: string;
+    balance: number;
+    pagos: IPago[];
+
+    constructor(numero: number, nombreResidente: string, balance: number) {
+        this.numero = numero;
+        this.nombreResidente = nombreResidente;
+        this.balance = balance;
+        this.pagos = [];
+    }
+
+    registrarPago(cantidad: number): void {
+        const pago: IPago = { cantidad, fecha: new Date() };
+        this.pagos.push(pago);
+        this.balance -= cantidad;
+    }
+
+    obtenerBalance(): number {
+        return this.balance;
+    }
+
+    estadoPagos(): EstadoPago {
+        return this.balance <= 0 ? 'Pagado' : 'Pendiente';
+    }
+
+    historialPagos(): IPago[] {
+        return this.pagos;
+    }
+}
+
+class Edificio {
+    apartamentos: Apartamento[];
+
+    constructor() {
+        this.apartamentos = [];
+    }
+
+    agregarApartamento(numero: number, nombreResidente: string, balance: number): void {
+        const apartamento = new Apartamento(numero, nombreResidente, balance);
+        this.apartamentos.push(apartamento);
+    }
+
+    buscarApartamento(numero: number): Apartamento | undefined {
+        return this.apartamentos.find(apto => apto.numero === numero);
+    }
+
+    registrarPago(numero: number, cantidad: number): void {
+        const apartamento = this.buscarApartamento(numero);
+        if (apartamento) {
+            apartamento.registrarPago(cantidad);
+            console.log(`Pago registrado para el apartamento ${numero}: $${cantidad}`);
+        } else {
+            console.log(`Apartamento ${numero} no encontrado.`);
+        }
+    }
+
+    mostrarEstadoPagos(): void {
+        this.apartamentos.forEach(apto => {
+            console.log(`Apartamento ${apto.numero} (${apto.nombreResidente}): ${apto.estadoPagos()}`);
+        });
+    }
+
+    mostrarBalances(): void {
+        this.apartamentos.forEach(apto => {
+            console.log(`Apartamento ${apto.numero} - Balance: $${apto.obtenerBalance()}`);
+        });
+    }
+}
+
+class Registro<T> {
+    private actividades: T[] = [];
+
+    agregar(actividad: T): void {
+        this.actividades.push(actividad);
+    }
+
+    obtenerTodo(): T[] {
+        return this.actividades;
+    }
+}
+
+const miEdificio = new Edificio();
+
+miEdificio.agregarApartamento(101, 'Juan Pérez', 500);
+miEdificio.agregarApartamento(102, 'María García', 750);
+miEdificio.agregarApartamento(103, 'Carlos López', 600);
+
+miEdificio.registrarPago(101, 200);  // Juan Pérez paga $200
+miEdificio.registrarPago(102, 400);  // María García paga $400
+miEdificio.registrarPago(103, 600);  // Carlos López paga el total
+
+miEdificio.mostrarEstadoPagos(); 
+
+miEdificio.mostrarBalances();
+
+const registroPagos = new Registro<IPago>();
+
+registroPagos.agregar({ cantidad: 200, fecha: new Date() });
+registroPagos.agregar({ cantidad: 400, fecha: new Date() });
+
+console.log("Historial de pagos registrados:");
+console.log(registroPagos.obtenerTodo());
